@@ -39,6 +39,20 @@ class Player:
         self.name = name
         self.cards = []
 
+    def deal_card(self):
+
+        if len(self.cards) > 0:
+            return self.cards.pop(0)
+        else:
+            None
+
+    def add_card(self, new_cards):
+
+        self.cards.extend(new_cards)
+
+
+        
+
 # controls main flow of the game with loops until winning conditions are met
 def main():
 
@@ -53,6 +67,30 @@ def main():
         player2.cards.append(deck.deal())
     print(len(player1.cards))
     print(len(player2.cards))
+
+    round_count = 1
+    while True:
+        print(f"Round {round_count}")
+        print(f"{player1.name}: {len(player1.cards)}")
+        print(f"{player2.name}: {len(player2.cards)}")
+        card1 = player1.deal_card()
+        card2 = player2.deal_card()
+        print(f"{player1.name} plays {card1}")
+        print(f"{player2.name} plays {card2}")
+
+        if card1 is None or card2 is None:
+            break
+
+        if card1.rank > card2.rank:
+            player1.add_card([card1, card2])
+        elif card1.rank < card2.rank:
+            player2.add_card([card1, card2])
+        else:
+            print("War")
+            break
+        round_count += 1
+
+
 
 if __name__ == "__main__":
     main()
