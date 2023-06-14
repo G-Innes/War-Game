@@ -81,13 +81,50 @@ def main():
         if card1 is None or card2 is None:
             break
 
-        if card1.rank > card2.rank:
+        elif card1.rank > card2.rank:
+            # introduced War boolean
+            war = False
             player1.add_card([card1, card2])
+
         elif card1.rank < card2.rank:
+            war = False
             player2.add_card([card1, card2])
-        else:
-            print("War")
-            break
+        
+        # war case    
+        elif card1.rank == card2.rank:    
+            elif len(player1.cards) > 4 and len(player2.cards) > 4:
+                war = True
+                while war = True: 
+                    player1_list = []
+                    player2_list = []
+                    card_list = []
+
+                    for i in range(5):
+                        player1_list.append(player1_list.deal_card())
+                        player2_list.append(player2_list.deal_card())
+                    card_list.extend(player1_list)
+                    card_list.extend(player2_list) 
+
+                    if player1_list[0].value > player2[0].value:
+                        player1.add_cards(card_list)
+                        war = False
+                        break
+                        
+                    elif player1_list[0].value < player2[0].value:
+                        player2.add_cards(card_list)
+                        war = False
+                        break
+                    
+                    #war keeps going
+                    else:
+                        war = True
+
+            # if players don't have enough cards, the game ends:
+            else: 
+                war = False
+                return False
+                break
+            
         round_count += 1
 
 
