@@ -1,4 +1,5 @@
 import random 
+import time
 
 # represents card with suit & rank attributes
 class Card:
@@ -39,19 +40,15 @@ class Player:
         self.name = name
         self.cards = []
 
+    # deals card from player cards
     def deal_card(self):
-
         if len(self.cards) > 0:
             return self.cards.pop(0)
         else:
             None
-
+    # adds new card to list of player cards
     def add_card(self, new_cards):
-
         self.cards.extend(new_cards)
-
-
-        
 
 # controls main flow of the game with loops until winning conditions are met
 def main():
@@ -62,13 +59,17 @@ def main():
     player1 = Player("Player 1")
     player2 = Player("Player 2")
 
+    # deals cards to players until deck is empty
     while len(deck.cards) > 0:
         player1.cards.append(deck.deal())
         player2.cards.append(deck.deal())
+
     print(len(player1.cards))
     print(len(player2.cards))
 
     round_count = 1
+    
+    # main game loop
     while True:
         print(f"Round {round_count}")
         print(f"{player1.name}: {len(player1.cards)}")
@@ -78,6 +79,8 @@ def main():
         print(f"{player1.name} plays {card1}")
         print(f"{player2.name} plays {card2}")
 
+        time.sleep(1)
+        # breaks from loop once one player has no cards left
         if card1 is None or card2 is None:
             break
 
@@ -86,11 +89,41 @@ def main():
         elif card1.rank < card2.rank:
             player2.add_card([card1, card2])
         else:
-            print("War")
-            break
+            war_cards = [card1, card2]
+            # if a tie a war commences 3 cards down 1 up and winner collects all
+            while True:
+                print("War!")
+                print()
+                for _ in range(3):
+                    war_card1 = player1.deal_card()
+                    war_card2 = player2.deal_card()
+                    if war_card1 is not None:
+                        war_cards.append(war_card1)
+                    if war_card2 is not None:
+                        war_cards.append(war_card2)
+                if war_card1 is None or war_card2 is None:
+                    break
+                print(f"{player1.name} plays: {war_card1}")
+                print(f"{player2.name} plays: {war_card2}")
+                print()
+
+                # compares ranks of war cards and determines winner
+                if war_card1.rank > war_card2.rank:
+                    player1.add_card(war_cards)
+                    print(f"{player1.name} wins the war and the round!")
+                    break
+                elif war_card1.rank < war_card2.rank:
+                    player2.add_card(war_cards)
+                    print(f"{player2.name} wins the war and the round!")
+                    break
+        print("--------------------")
+        print()
         round_count += 1
-
-
+    # determines winner 
+    if len(player1.cards) > len(player2.cards):
+        print(f"{player1.name} wins the game!")
+    elif len(player1.cards) < len(player2.cards):
+        print(f"{player2.name} wins the game!")
 
 if __name__ == "__main__":
     main()
